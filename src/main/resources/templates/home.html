@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymleaf.org">
+<head>
+	<title>Home</title>
+	<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+	<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body>
+	<nav th:replace="fragments/fragment :: navbar"></nav>
+	
+	
+	<div class="jumbotron text-center" style="text-align:center">
+	  <h1 class="display-3">Sistem Informasi Kepegawaian</h1>
+	  <p class="lead">Selamat Datang di Sistem Informasi Kepegawaian!</p>
+	  <br>
+	  <hr class="my-2">
+	  <div class="card" style="width: 500px; padding: 20px; margin:10px; display: inline-block">
+	  <p class="lead"><b>Lihat data kepegawaian berdasarkan NIP</b></p>
+	  <div class="lead">
+	  	<form th:action="@{/pegawai}"  method="GET">
+		  	<div class="form-group">
+			    <label for="nip">Masukkan Nomor Induk Pegawai (NIP):</label>
+			    <br>
+				<input type="text" name="nip"/>
+			</div>
+			<button class="btn btn-primary btn-md" type="submit">Lihat</button>
+		</form>
+	  </div>
+	  </div>
+	  <div class="card" style="width: 500px; padding: 20px; margin:10px; display: inline-block">
+	  <p class="lead"><b>Lihat detail jabatan</b></p>
+	  <div class="lead">
+	  	<form th:action="@{/jabatan/view}"  method="GET">
+		  	<div class="form-group">
+			    <label for="nip">Pilih jabatan:</label>
+			    <br>
+				<select class="form-control" required="required" name="idJabatan">
+            		<option th:each="jabatan : ${listJabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}" ></option>
+          		</select>
+			</div>
+			<button class="btn btn-primary btn-md" type="submit">Lihat</button>
+		</form>
+	  </div>
+	  </div>
+	</div>
+	
+		
+	
+</body>
+</html>
