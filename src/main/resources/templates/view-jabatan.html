@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<title>View Jabatan</title>
 	
@@ -7,7 +10,6 @@
 
 <body>
 	<nav th:replace="fragments/fragment :: navbar"></nav>
-	
 
 			<div class="card border-info mb-3 text-center" style="margin:25px;">
 				<div class="card-header">
@@ -31,11 +33,20 @@
    								</tr>
   							</tbody>
 						</table>
-  							<button type="submit" class="btn btn-primary" href="#">Ubah</button>
-  							<button type="submit" class="btn btn-danger" href="#">Hapus</button>
+						<div style="display: inline-block; text-align:center">
+  						<form th:action="@{/jabatan/update-jabatan}" class="col-md-3" method="get">
+            				<input type="hidden" name="idJabatan" th:value="${jabatan.id}">
+            				<button type="submit" class="btn btn-primary">Ubah</button>
+        				</form>
+        				<br>
+				        <form class="col-md-3">
+        					<input type="hidden" name="idJabatan" th:value="${jabatan.id}">
+            				<button type="submit" class="btn">Hapus</button>
+        				</form>
+        				</div>
 					</div>
 				</div>
 			</div>
-
 </body>
+
 </html>
