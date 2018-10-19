@@ -39,10 +39,9 @@
             				<button type="submit" class="btn btn-primary">Ubah</button>
         				</form>
         				<br>
-				        <form class="col-md-3">
-        					<input type="hidden" name="idJabatan" th:value="${jabatan.id}">
-            				<button type="submit" class="btn">Hapus</button>
-        				</form>
+				        <form th:action="@{/jabatan/delete-jabatan}" th:object="${jabatan}" method="POST">
+            					<input type="hidden" th:field="*{id}" />
+            					<button type="submit" class="btn btn-danger">Hapus</button>
         				</div>
 					</div>
 				</div>

@@ -64,4 +64,10 @@ public class JabatanController {
 		return "add-result";
 	}
 	
+	@RequestMapping(value = "/jabatan/delete-jabatan", method = RequestMethod.POST)
+	private String deleteJabatan(@ModelAttribute JabatanModel jabatan, Model model) {
+		jabatanService.deleteJabatanById(jabatan.getId());
+		model.addAttribute("message", "Data berhasil dihapus!");
+		return "add-result";
+	}
 }
