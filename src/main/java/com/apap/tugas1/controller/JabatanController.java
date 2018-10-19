@@ -36,4 +36,20 @@ public class JabatanController {
 		return "view-all-jabatan";
 	}
 	
+	@RequestMapping(value="/jabatan/add-jabatan", method = RequestMethod.GET)
+	private String addJabatan(Model model) {
+		JabatanModel jabatan = new JabatanModel();
+		model.addAttribute("jabatan", jabatan);
+		return "add-jabatan";
+	}
+	
+	@RequestMapping(value="/jabatan/add-jabatan", method = RequestMethod.POST)
+	private String submitNewJabatan (@ModelAttribute JabatanModel jabatan, Model model) {
+		jabatanService.addJabatan(jabatan);
+		model.addAttribute("jabatan", jabatan);
+		return "add-result";
+	}
+	
+	
+	
 }
