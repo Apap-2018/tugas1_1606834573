@@ -59,7 +59,7 @@ public class JabatanController {
 	
 	@RequestMapping(value="/jabatan/update-jabatan",  method = RequestMethod.POST )
 	private String submitUpdateJabatan(@ModelAttribute JabatanModel jabatan, Model model){
-		jabatanService.addJabatan(jabatan);
+		jabatanService.updateJabatan(jabatan);
 		model.addAttribute("message", "Data berhasil diubah!");
 		return "add-result";
 	}
