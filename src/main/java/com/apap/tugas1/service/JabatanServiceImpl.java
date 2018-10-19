@@ -36,5 +36,13 @@ public class JabatanServiceImpl implements JabatanService {
 	public void deleteJabatanById(long id) {
 		jabatanDb.deleteById(id);
 	}
+
+	public void updateJabatan(JabatanModel jabatan) {
+		JabatanModel updateJabatan = jabatanDb.findById(jabatan.getId()).get();
+		updateJabatan.setNama(jabatan.getNama());
+		updateJabatan.setDeskripsi(jabatan.getDeskripsi());
+		updateJabatan.setGajiPokok(jabatan.getGajiPokok());
+		jabatanDb.save(updateJabatan);
+	}
 	
 }

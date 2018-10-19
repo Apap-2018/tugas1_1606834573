@@ -10,4 +10,5 @@ public interface JabatanService {
 	Optional<JabatanModel> getJabatanById(long id);
 	void addJabatan(JabatanModel jabatan);
 	void deleteJabatanById(long id);
+	void updateJabatan(JabatanModel jabatan);
 }
