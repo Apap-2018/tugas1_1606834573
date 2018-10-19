@@ -1,0 +1,17 @@
+<head>
+	<title>Error found!</title>
+	
+	<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+	<object th:include="fragments/fragment :: js" th:remove="tag"></object>	
+</head>
+
+<body>
+	<nav th:replace="fragments/fragment :: navbar"></nav>
+	
+	<div style="text-align:center; padding-top: 25px;">
+		<h1>Oops!</h1><br>
+		<p th:text="${message}"></p>
+		<button type="submit" class="btn btn-primary" ><a href="/" style="color: white">Kembali ke halaman awal</a></button>
+	</div>
+</body>
+</html>

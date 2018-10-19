@@ -2,6 +2,7 @@ package com.apap.tugas1.model;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "pegawai")
 
-public class PegawaiModel implements Serializable {
+public class PegawaiModel implements Serializable, Comparable<PegawaiModel> {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -134,4 +135,27 @@ public class PegawaiModel implements Serializable {
 		this.jabatanPegawai = jabatanPegawai;
 	}
 	
+	public int getAge() {
+		int birthdayYear = tanggalLahir.toLocalDate().getYear();
+		int nowYear = LocalDate.now().getYear();
+		return nowYear -birthdayYear;
+	}
+	
+	public double getGaji() {
+		double tunjangan = (instansi.getProvinsi().getPresentaseTunjangan())/100;
+		double gajiTerbesar = 0;
+		
+		for(JabatanPegawaiModel jabatan : jabatanPegawai) {
+			double gajiPokok = jabatan.getJabatan().getGajiPokok();
+			if(gajiPokok > gajiTerbesar) gajiTerbesar = gajiPokok;
+		}
+
+		double gaji = gajiTerbesar + (tunjangan * gajiTerbesar);
+		return gaji;
+	}
+	
+	@Override
+	public int compareTo(PegawaiModel o) {
+		return this.tanggalLahir.compareTo(o.getTanggalLahir());
+	}
 }

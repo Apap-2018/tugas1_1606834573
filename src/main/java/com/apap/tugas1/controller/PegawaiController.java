@@ -1,6 +1,7 @@
 package com.apap.tugas1.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.apap.tugas1.model.InstansiModel;
 import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.model.JabatanPegawaiModel;
 import com.apap.tugas1.model.PegawaiModel;
+import com.apap.tugas1.service.InstansiService;
 import com.apap.tugas1.service.JabatanService;
-import com.apap.tugas1.service.JabatanServiceImpl;
 import com.apap.tugas1.service.PegawaiService;
 
 @Controller
@@ -26,11 +28,16 @@ public class PegawaiController {
 	@Autowired
 	private JabatanService jabatanService;
 	
+	@Autowired
+	private InstansiService instansiService;
+	
 	@RequestMapping("/")
 	private String home(Model model) {
 		List<JabatanModel> listJabatan = jabatanService.getJabatan();
+		List<InstansiModel> listInstansi = instansiService.getInstansi();
 		model.addAttribute("home", true);
 		model.addAttribute("listJabatan", listJabatan);
+		model.addAttribute("listInstansi", listInstansi);
 		return "home";
 	}
 	
@@ -38,6 +45,7 @@ public class PegawaiController {
 	private String viewPegawai(@RequestParam(value = "nip", required = true) String nip, Model model) {
 		PegawaiModel pegawai = pegawaiService.getPegawaiDetailByNip(nip);
 		model.addAttribute("pegawai", pegawai);
+		
 		double gaji = 0;
 		double persentunjangan = pegawai.getInstansi().getProvinsi().getPresentaseTunjangan();
 		List<String> jabatan = new ArrayList<>();
@@ -67,6 +75,52 @@ public class PegawaiController {
 		return "tambah-pegawai";
 	}
 	
-	
-
+	@RequestMapping(value = "/pegawai/view-by-age", method = RequestMethod.GET)
+	private String viewPegawaiByAge(@RequestParam(value="idInstansi") long idInstansi, Model model) {
+		InstansiModel instansi = instansiService.getInstansiById(idInstansi).get();
+		List<PegawaiModel> listPegawai = instansi.getListPegawai();
+		
+		Collections.sort(listPegawai);
+		Collections.reverse(listPegawai);
+		
+		PegawaiModel termuda = listPegawai.get(0);
+		PegawaiModel tertua = listPegawai.get(listPegawai.size()-1);
+		
+		double gajiTermuda = 0;
+		double gajiTertua = 0;
+		
+		List<String> jabatanTermuda = new ArrayList<>();
+		List<String> jabatanTertua = new ArrayList<>();
+		
+		for (JabatanPegawaiModel jabatanPegawai : termuda.getJabatanPegawai()) {
+			double temp = 0;	
+			temp = jabatanPegawai.getJabatan().getGajiPokok();
+			jabatanTermuda.add(jabatanPegawai.getJabatan().getNama());
+			if(gajiTermuda < temp) {
+				gajiTermuda = temp;
+			}
+		}
+		
+		for (JabatanPegawaiModel jabatanPegawai : tertua.getJabatanPegawai()) {
+			double temp = 0;	
+			temp = jabatanPegawai.getJabatan().getGajiPokok();
+			jabatanTertua.add(jabatanPegawai.getJabatan().getNama());
+			if(gajiTertua < temp) {
+				gajiTertua = temp;
+			}
+		
+		}
+		
+		double persenTunjangan = termuda.getInstansi().getProvinsi().getPresentaseTunjangan();
+		
+		model.addAttribute("termuda", termuda);
+		model.addAttribute("tertua", tertua);
+		model.addAttribute("gajiTermuda", "Rp"+ String.format("%.0f", gajiTermuda * persenTunjangan/100 + gajiTermuda));
+		model.addAttribute("gajiTertua", "Rp"+ String.format("%.0f", gajiTertua * persenTunjangan/100 + gajiTertua));
+		model.addAttribute("home", true);
+		model.addAttribute("jabatanTermuda", jabatanTermuda);
+		model.addAttribute("jabatanTertua", jabatanTertua);
+		
+		return "view-pegawai-by-age";
+	}
 }

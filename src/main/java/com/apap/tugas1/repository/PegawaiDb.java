@@ -15,4 +15,5 @@ public interface PegawaiDb extends JpaRepository<PegawaiModel, Long>{
 	Optional<PegawaiModel> findById(long id);
 	PegawaiModel findByNip(String nip);
 	List<PegawaiModel> findByInstansiAndTanggalLahirAndTahunMasuk(InstansiModel instansi, Date tanggal_lahir, String tahunMasuk);
+	List<PegawaiModel> findByInstansi(InstansiModel instansi);
 }
