@@ -25,10 +25,15 @@ public class JabatanController {
 	@RequestMapping(value = "/jabatan/view", method = RequestMethod.GET)
 	private String viewJabatan(@RequestParam("idJabatan") long idJabatan, Model model) {
 		JabatanModel jabatan = jabatanService.getJabatanById(idJabatan).get();
-		System.out.println("X");
-		System.out.println(jabatan.getNama());
 		model.addAttribute("jabatan", jabatan);
 		return "view-jabatan";
+	}
+	
+	@RequestMapping(value="/jabatan/view-all", method = RequestMethod.GET)
+	private String viewAllJabatan(Model model) {
+		List<JabatanModel> listJabatan = jabatanService.getJabatan();
+		model.addAttribute("listJabatan", listJabatan);
+		return "view-all-jabatan";
 	}
 	
 }
