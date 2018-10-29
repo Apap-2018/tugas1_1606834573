@@ -28,7 +28,7 @@ public class InstansiServiceImpl implements InstansiService{
 	}
 
 	@Override
-	public Optional<InstansiModel> getInstansiById(long id) {
+	public InstansiModel getInstansiById(long id) {
 		return instansiDb.findById(id);
 	}
 

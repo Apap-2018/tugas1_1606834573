@@ -14,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -70,6 +72,10 @@ public class PegawaiModel implements Serializable, Comparable<PegawaiModel> {
     
 	@OneToMany(mappedBy = "pegawai", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	private List<JabatanPegawaiModel> jabatanPegawai;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "jabatanPegawaiNew", joinColumns = { @JoinColumn(name="id_pegawai", referencedColumnName="id")}, inverseJoinColumns = { @JoinColumn(name="id_jabatan", referencedColumnName="id") }) 
+	 private List<JabatanModel> listJabatan;
 	
     public long getId() {
 		return id;
@@ -135,6 +141,14 @@ public class PegawaiModel implements Serializable, Comparable<PegawaiModel> {
 		this.jabatanPegawai = jabatanPegawai;
 	}
 	
+	public List<JabatanModel> getListJabatan() {
+		return listJabatan;
+	}
+
+	public void setListJabatan(List<JabatanModel> listJabatan) {
+		this.listJabatan = listJabatan;
+	}
+
 	public int getAge() {
 		int birthdayYear = tanggalLahir.toLocalDate().getYear();
 		int nowYear = LocalDate.now().getYear();

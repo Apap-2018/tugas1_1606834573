@@ -16,9 +16,11 @@ import com.apap.tugas1.model.InstansiModel;
 import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.model.JabatanPegawaiModel;
 import com.apap.tugas1.model.PegawaiModel;
+import com.apap.tugas1.model.ProvinsiModel;
 import com.apap.tugas1.service.InstansiService;
 import com.apap.tugas1.service.JabatanService;
 import com.apap.tugas1.service.PegawaiService;
+import com.apap.tugas1.service.ProvinsiService;
 
 @Controller
 public class PegawaiController {
@@ -30,6 +32,9 @@ public class PegawaiController {
 	
 	@Autowired
 	private InstansiService instansiService;
+	
+	@Autowired
+	private ProvinsiService provinsiService;
 	
 	@RequestMapping("/")
 	private String home(Model model) {
@@ -77,7 +82,7 @@ public class PegawaiController {
 	
 	@RequestMapping(value = "/pegawai/view-by-age", method = RequestMethod.GET)
 	private String viewPegawaiByAge(@RequestParam(value="idInstansi") long idInstansi, Model model) {
-		InstansiModel instansi = instansiService.getInstansiById(idInstansi).get();
+		InstansiModel instansi = instansiService.getInstansiById(idInstansi);
 		List<PegawaiModel> listPegawai = instansi.getListPegawai();
 		
 		Collections.sort(listPegawai);
@@ -123,4 +128,39 @@ public class PegawaiController {
 		
 		return "view-pegawai-by-age";
 	}
+	
+	@RequestMapping(value = "/pegawai/cari", method = RequestMethod.GET)
+	private String cariPegawai(Model model) {
+		List<JabatanModel> jabatan = jabatanService.getJabatan();
+		List<InstansiModel> instansi = instansiService.getInstansi();
+		List<ProvinsiModel> provinsi = provinsiService.getProvinsi();
+		model.addAttribute("listJabatan", jabatan);
+		model.addAttribute("listInstansi", instansi);
+		model.addAttribute("listProvinsi", provinsi);
+		model.addAttribute("pageTitle", "Cari Pegawai");
+		
+		return "cari-pegawai";
+	}
+	
+	@RequestMapping(value = "/pegawai/cari", method = RequestMethod.POST)
+	private String findPegawaiCari(@ModelAttribute PegawaiModel pegawai1, @RequestParam("instansi")long idInstansi, @RequestParam("provinsi")long idProvinsi, @RequestParam("jabatan")long idJabatan, Model model) {
+		InstansiModel instansi = instansiService.getInstansiById(idInstansi);
+		JabatanModel jabatan = jabatanService.getJabatanById(idJabatan).get();
+		List<PegawaiModel> listPegawai = pegawaiService.getFilter(idInstansi, idJabatan);
+		
+		model.addAttribute("nama", instansi.getNama());
+		model.addAttribute("namaJabatan", jabatan.getNama());
+	    model.addAttribute("listPegawai", listPegawai);
+	    
+	    List<ProvinsiModel> listProvinsi = provinsiService.getProvinsi();
+		List<JabatanModel> listJabatan = jabatanService.getJabatan();
+		List<InstansiModel> listInstansi = instansiService.getInstansi();
+		
+	    model.addAttribute("listJabatan", listJabatan);
+	    model.addAttribute("listInstansi", listInstansi);
+	    model.addAttribute("listProvinsi", listProvinsi);
+	    
+		return "cari-pegawai";
+	}
+	
 }
